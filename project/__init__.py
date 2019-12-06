@@ -1,41 +1,29 @@
 # import sys
 import os
-from flask import Flask, jsonify
-from flask_restful import Resource, Api
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-# instantiate app
-app = Flask(__name__)
-
-api = Api(app)
-
-# set config
-app_settings = os.getenv('APP_SETTINGS')
-app.config.from_object(app_settings)
-
-# print(app.config, file=sys.stderr)
-
 # instantiate db
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 
-# model
-class User(db.Model):
-    __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(128), nullable=False)
-    email = db.Column(db.String(128), nullable=False)
-    active = db.Column(db.Boolean(), default=True, nullable=False)
+def create_app(script_info=None):
 
-    def __init__(self, username, email):
-        self.username = username
-        self.email = email
-        
+    # instantiate app
+    app = Flask(__name__)
 
-class Ping(Resource):
-    def get(self):
-        return {
-            'status': 'success',
-            'ping': 'pong'
-        }
+    # set config
+    app_settings = os.getenv('APP_SETTINGS')
+    app.config.from_object(app_settings)
 
-api.add_resource(Ping, '/ping')
+    db.init_app(app)
+
+    from project.api.ping import ping_blueprint
+    from project.api.users import users_blueprint
+    app.register_blueprint(ping_blueprint)
+    app.register_blueprint(users_blueprint)
+
+    @app.shell_context_processor
+    def ctx():
+        return {'app': app, 'db': db}
+
+    return app
