@@ -41,6 +41,15 @@ class UserList(Resource):
         except exc.IntegrityError:
             db.session.rollback()
             return res, 400
+    def get(self):
+        res = {
+            'status': 'success',
+            'data': {
+                'users': [user.to_json() for user in User.query.all()]
+            }
+        }
+
+        return res, 200
 
 class Users(Resource):
     def get(self, user_id):
