@@ -8,7 +8,7 @@ from project.api.models import User
 users_blueprint = Blueprint('users', __name__)
 api = Api(users_blueprint)
 
-class Users(Resource):
+class UserList(Resource):
     def post(self):
         post_data = request.get_json()
 
@@ -42,5 +42,32 @@ class Users(Resource):
             db.session.rollback()
             return res, 400
 
+class Users(Resource):
+    def get(self, user_id):
+        res = {
+                'status': 'fail',
+                'message': 'There is no user with that user_id'
+                }
 
-api.add_resource(Users, '/users')
+        try:
+            user = User.query.filter_by(id=int(user_id)).first()
+
+            if not user:
+                return res, 404     
+            else:
+                res = {
+                    'status': 'success',
+                    'data': {
+                        'id': user.id,
+                        'username': user.username,
+                        'email': user.email,
+                        'active': user.active
+                    }
+                }
+
+                return res, 200
+        except ValueError:
+            return res, 404   
+
+api.add_resource(UserList, '/users')
+api.add_resource(Users, '/users/<user_id>')
