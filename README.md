@@ -12,6 +12,9 @@
 
 * `docker-compose exec users pytest "project/tests"`
 * `docker-compose exec users pytest -p no:warnings "project/tests"`
+* `docker-compose exec users pytest "project/tests" -p no:warnings --cov="project"`
+* `docker-compose exec users pytest "project/tests" -p no:warnings --cov="project" --cov-report html`
+* `open htmlcov/index.html`
 
 ### Working with the database
 
@@ -19,3 +22,4 @@
 * `docker-compose exec users python manage.py seed_db` - seed the db
 * `docker-compose exec users-db psql -U postgres` - connect to the db
 * `docker-compose exec users flask shell` - interact with app and db from shell
+
