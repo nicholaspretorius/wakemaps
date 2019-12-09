@@ -5,7 +5,7 @@ from sqlalchemy import exc
 from project import db
 from project.api.models import User
 
-users_blueprint = Blueprint('users', __name__)
+users_blueprint = Blueprint("users", __name__)
 api = Api(users_blueprint)
 
 
@@ -13,16 +13,13 @@ class UserList(Resource):
     def post(self):
         post_data = request.get_json()
 
-        res = {
-            'status': 'fail',
-            'message': 'invalid payload'
-        }
+        res = {"status": "fail", "message": "invalid payload"}
 
         if not post_data:
             return res, 400
 
-        username = post_data.get('username')
-        email = post_data.get('email')
+        username = post_data.get("username")
+        email = post_data.get("email")
 
         try:
             user = User.query.filter_by(email=email).first()
@@ -30,14 +27,11 @@ class UserList(Resource):
                 db.session.add(User(username=username, email=email))
                 db.session.commit()
 
-                res = {
-                    'status': 'success',
-                    'message': f'{email} was added!'
-                }
+                res = {"status": "success", "message": f"{email} was added!"}
 
                 return res, 201
             else:
-                res['message'] = 'Sorry. That email already exists.'
+                res["message"] = "Sorry. That email already exists."
                 return res, 400
         except exc.IntegrityError:
             db.session.rollback()
@@ -45,10 +39,8 @@ class UserList(Resource):
 
     def get(self):
         res = {
-            'status': 'success',
-            'data': {
-                'users': [user.to_json() for user in User.query.all()]
-            }
+            "status": "success",
+            "data": {"users": [user.to_json() for user in User.query.all()]},
         }
 
         return res, 200
@@ -56,10 +48,7 @@ class UserList(Resource):
 
 class Users(Resource):
     def get(self, user_id):
-        res = {
-                'status': 'fail',
-                'message': 'There is no user with that user_id'
-                }
+        res = {"status": "fail", "message": "There is no user with that user_id"}
 
         try:
             user = User.query.filter_by(id=int(user_id)).first()
@@ -68,13 +57,13 @@ class Users(Resource):
                 return res, 404
             else:
                 res = {
-                    'status': 'success',
-                    'data': {
-                        'id': user.id,
-                        'username': user.username,
-                        'email': user.email,
-                        'active': user.active
-                    }
+                    "status": "success",
+                    "data": {
+                        "id": user.id,
+                        "username": user.username,
+                        "email": user.email,
+                        "active": user.active,
+                    },
                 }
 
                 return res, 200
@@ -82,5 +71,5 @@ class Users(Resource):
             return res, 404
 
 
-api.add_resource(UserList, '/users')
-api.add_resource(Users, '/users/<user_id>')
+api.add_resource(UserList, "/users")
+api.add_resource(Users, "/users/<user_id>")
