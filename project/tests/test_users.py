@@ -2,6 +2,7 @@ import json
 
 from project.tests.utils import add_user, recreate_db
 
+
 def test_add_user(test_app, test_database):
     client = test_app.test_client()
     res = client.post('/users', data=json.dumps({
@@ -45,7 +46,7 @@ def test_add_user_duplicate_email(test_app, test_database):
             'username': 'nicholas',
             'email': 'nicholaspretorius@gmail.com'
         }),
-        content_type='application/json' 
+        content_type='application/json'
     )
     resp = client.post(
         '/users',

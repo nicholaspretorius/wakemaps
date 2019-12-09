@@ -8,6 +8,7 @@ from project.api.models import User
 users_blueprint = Blueprint('users', __name__)
 api = Api(users_blueprint)
 
+
 class UserList(Resource):
     def post(self):
         post_data = request.get_json()
@@ -37,10 +38,11 @@ class UserList(Resource):
                 return res, 201
             else:
                 res['message'] = 'Sorry. That email already exists.'
-                return res, 400 
+                return res, 400
         except exc.IntegrityError:
             db.session.rollback()
             return res, 400
+
     def get(self):
         res = {
             'status': 'success',
@@ -50,6 +52,7 @@ class UserList(Resource):
         }
 
         return res, 200
+
 
 class Users(Resource):
     def get(self, user_id):
@@ -62,7 +65,7 @@ class Users(Resource):
             user = User.query.filter_by(id=int(user_id)).first()
 
             if not user:
-                return res, 404     
+                return res, 404
             else:
                 res = {
                     'status': 'success',
@@ -76,7 +79,8 @@ class Users(Resource):
 
                 return res, 200
         except ValueError:
-            return res, 404   
+            return res, 404
+
 
 api.add_resource(UserList, '/users')
 api.add_resource(Users, '/users/<user_id>')
