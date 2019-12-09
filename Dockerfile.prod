@@ -25,6 +25,7 @@ COPY . /usr/src/app
 # add and run as non-root user
 RUN adduser -D wakemaps-u
 USER wakemaps-u
+RUN chmod +x /usr/src/app/release.sh
 
 # run gunicorn
 CMD gunicorn --bind 0.0.0.0:$PORT manage:app
