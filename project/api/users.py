@@ -88,6 +88,35 @@ class Users(Resource):
         except ValueError:
             return res, 404
 
+    def put(self, user_id):
+        post_data = request.get_json()
+        res = {"status": "fail", "message": "Invalid payload"}
+
+        if not post_data:
+            return res, 400
+
+        username = post_data.get("username")
+        email = post_data.get("email")
+
+        if not username or not email:
+            return res, 400
+
+        try:
+            user = User.query.filter_by(id=int(user_id)).first()
+            if not user:
+                res["message"] = "There is no user with that user_id"
+                return res, 404
+            else:
+                user.username = username
+                user.email = email
+                db.session.commit()
+                res["status"] = "success"
+                res["message"] = f"{user.id} was updated"
+                return res, 200
+        except exc.IntegrityError:
+            db.session.rollback()
+            return res, 400
+
 
 api.add_resource(UserList, "/users")
 api.add_resource(Users, "/users/<user_id>")
