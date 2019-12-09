@@ -34,7 +34,7 @@ test:
     POSTGRES_PASSWORD: ""
     DATABASE_TEST_URL: postgres://runner@postgres:5432/users
   script:
-    - pytest "project/tests" - p no:warnings
+    - pytest "project/tests" -p no:warnings
     - flake8 project
     - black project --check
     - isort project/**/*.py --check-only
