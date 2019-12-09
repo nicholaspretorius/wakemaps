@@ -108,3 +108,31 @@ def test_all_users(test_app, test_database):
     assert "jack" in data["data"]["users"][1]["username"]
     assert "jack@jill.com" in data["data"]["users"][1]["email"]
     assert "success" in data["status"]
+
+
+def test_remove_user(test_app, test_database):
+    recreate_db()
+    user = add_user("removal", "removal@remove.com")
+    client = test_app.test_client()
+    res_one = client.get("/users")
+    data = json.loads(res_one.data.decode())
+    assert res_one.status_code == 200
+    assert len(data["data"]["users"]) == 1
+    res_two = client.delete(f"/users/{user.id}")
+    data = json.loads(res_two.data.decode())
+    assert res_two.status_code == 200
+    assert "removal@remove.com was removed" in data["message"]
+    assert "success" in data["status"]
+    res_three = client.get("/users")
+    data = json.loads(res_three.data.decode())
+    assert res_three.status_code == 200
+    assert len(data["data"]["users"]) == 0
+
+
+def test_remove_user_incorrect(test_app, test_database):
+    client = test_app.test_client()
+    res = client.delete("/users/999")
+    data = json.loads(res.data.decode())
+    assert res.status_code == 404
+    assert "There is no user with that user_id" in data["message"]
+    assert "fail" in data["status"]
