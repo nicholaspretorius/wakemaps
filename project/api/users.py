@@ -70,6 +70,24 @@ class Users(Resource):
         except ValueError:
             return res, 404
 
+    def delete(self, user_id):
+        res = {"status": "fail", "message": "There is no user with that user_id"}
+
+        try:
+            user = User.query.get(user_id)
+
+            if user is None:
+                return res, 404
+            else:
+                db.session.delete(user)
+                db.session.commit()
+
+                res = {"status": "success", "message": f"{user.email} was removed"}
+
+                return res, 200
+        except ValueError:
+            return res, 404
+
 
 api.add_resource(UserList, "/users")
 api.add_resource(Users, "/users/<user_id>")
