@@ -74,9 +74,9 @@ class Users(Resource):
         res = {"status": "fail", "message": "There is no user with that user_id"}
 
         try:
-            user = User.query.get(user_id)
+            user = User.query.filter_by(id=int(user_id)).first()
 
-            if user is None:
+            if not user:
                 return res, 404
             else:
                 db.session.delete(user)
