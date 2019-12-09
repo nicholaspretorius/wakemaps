@@ -129,9 +129,67 @@ def test_remove_user(test_app, test_database):
     assert len(data["data"]["users"]) == 0
 
 
-def test_remove_user_incorrect(test_app, test_database):
+def test_remove_user_incorrect_id(test_app, test_database):
     client = test_app.test_client()
     res = client.delete("/users/999")
+    data = json.loads(res.data.decode())
+    assert res.status_code == 404
+    assert "There is no user with that user_id" in data["message"]
+    assert "fail" in data["status"]
+
+
+def test_update_user(test_app, test_database):
+    recreate_db()
+    user = add_user("update", "update@test.com")
+    client = test_app.test_client()
+
+    res_one = client.put(
+        f"/users/{user.id}",
+        data=json.dumps({"username": "updated", "email": "update1@test.com"}),
+        content_type="application/json",
+    )
+    data = json.loads(res_one.data.decode())
+    assert res_one.status_code == 200
+    assert f"{user.id} was updated" in data["message"]
+    assert "success" in data["status"]
+
+    res_two = client.get(f"/users/{user.id}")
+    data = json.loads(res_two.data.decode())
+    assert res_two.status_code == 200
+    assert "updated" in data["data"]["username"]
+    assert "update1@test.com" in data["data"]["email"]
+    assert "success" in data["status"]
+
+
+def test_update_user_no_json(test_app, test_database):
+    client = test_app.test_client()
+    res = client.put("/users/1", data=json.dumps({}), content_type="application/json")
+    data = json.loads(res.data.decode())
+    assert res.status_code == 400
+    assert "Invalid payload" in data["message"]
+    assert "fail" in data["status"]
+
+
+def test_update_user_incorrect_json(test_app, test_database):
+    client = test_app.test_client()
+    res = client.put(
+        "/users/1",
+        data=json.dumps({"email": "me@me.com"}),
+        content_type="application/json",
+    )
+    data = json.loads(res.data.decode())
+    assert res.status_code == 400
+    assert "Invalid payload" in data["message"]
+    assert "fail" in data["status"]
+
+
+def test_update_user_incorrect_id(test_app, test_database):
+    client = test_app.test_client()
+    res = client.put(
+        "/users/999",
+        data=json.dumps({"username": "me", "email": "me@me.com"}),
+        content_type="application/json",
+    )
     data = json.loads(res.data.decode())
     assert res.status_code == 404
     assert "There is no user with that user_id" in data["message"]
