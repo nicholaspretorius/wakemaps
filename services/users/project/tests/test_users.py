@@ -8,7 +8,7 @@ def test_add_user(test_app, test_database):
     res = client.post(
         "/users",
         data=json.dumps(
-            {"username": "nicholas", "email": "nicholaspretorius@gmail.com"}
+            {"username": "nicholas", "email": "nicholaspretorius@gmail.com", "password": "greaterthaneight"}
         ),
         content_type="application/json",
     )
@@ -22,6 +22,20 @@ def test_add_user(test_app, test_database):
 def test_add_user_invalid_json(test_app, test_database):
     client = test_app.test_client()
     res = client.post("/users", data=json.dumps({}), content_type="application/json")
+
+    data = json.loads(res.data.decode())
+    assert res.status_code == 400
+    assert "invalid payload" in data["message"]
+    assert "fail" in data["status"]
+
+
+def test_add_user_invalid_json_keys_no_password(test_app, test_database):
+    client = test_app.test_client()
+    res = client.post(
+        '/users',
+        data=json.dumps({"username": "testuser", "email": "test@test.com"}),
+        content_type="application/json",
+    )
 
     data = json.loads(res.data.decode())
     assert res.status_code == 400
@@ -48,14 +62,14 @@ def test_add_user_duplicate_email(test_app, test_database):
     client.post(
         "/users",
         data=json.dumps(
-            {"username": "nicholas", "email": "nicholaspretorius@gmail.com"}
+            {"username": "nicholas", "email": "nicholaspretorius@gmail.com", "password": "greaterthaneight"}
         ),
         content_type="application/json",
     )
     resp = client.post(
         "/users",
         data=json.dumps(
-            {"username": "nicholas", "email": "nicholaspretorius@gmail.com"}
+            {"username": "nicholas", "email": "nicholaspretorius@gmail.com", "password": "greaterthaneight"}
         ),
         content_type="application/json",
     )
@@ -66,7 +80,7 @@ def test_add_user_duplicate_email(test_app, test_database):
 
 
 def test_single_user(test_app, test_database):
-    user = add_user("John", "john@doe.com")
+    user = add_user("John", "john@doe.com", "greaterthaneight")
     client = test_app.test_client()
     res = client.get(f"/users/{user.id}")
     data = json.loads(res.data.decode())
@@ -96,8 +110,8 @@ def test_single_user_incorrect_id(test_app, test_database):
 
 def test_all_users(test_app, test_database):
     recreate_db()
-    add_user("jane", "jane@doe.com")
-    add_user("jack", "jack@jill.com")
+    add_user("jane", "jane@doe.com", "greaterthaneight")
+    add_user("jack", "jack@jill.com", "greaterthaneight")
     client = test_app.test_client()
     resp = client.get("/users")
     data = json.loads(resp.data.decode())
@@ -112,7 +126,7 @@ def test_all_users(test_app, test_database):
 
 def test_remove_user(test_app, test_database):
     recreate_db()
-    user = add_user("removal", "removal@remove.com")
+    user = add_user("removal", "removal@remove.com", "greaterthaneight")
     client = test_app.test_client()
     res_one = client.get("/users")
     data = json.loads(res_one.data.decode())
@@ -140,7 +154,7 @@ def test_remove_user_incorrect_id(test_app, test_database):
 
 def test_update_user(test_app, test_database):
     recreate_db()
-    user = add_user("update", "update@test.com")
+    user = add_user("update", "update@test.com", "greaterthaneight")
     client = test_app.test_client()
 
     res_one = client.put(
