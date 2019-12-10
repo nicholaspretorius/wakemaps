@@ -1,3 +1,4 @@
+from project.api.users.models import User
 from project.tests.utils import add_user, recreate_db
 
 
@@ -12,3 +13,11 @@ def test_encode_auth_token(test_app):
     user = add_user("justatest", "test@test.com", "greaterthaneight")
     auth_token = user.encode_auth_token(user.id)
     assert isinstance(auth_token, bytes)
+
+
+def test_decode_auth_token(test_app):
+    user = add_user("justatest", "test@test.com", "greaterthaneight")
+    auth_token = user.encode_auth_token(user.id)
+
+    assert isinstance(auth_token, bytes)
+    assert User.decode_auth_token(auth_token) == user.id
