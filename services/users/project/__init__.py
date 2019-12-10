@@ -21,6 +21,7 @@ def create_app(script_info=None):
     app.config.from_object(app_settings)
 
     db.init_app(app)
+    cors.init_app(app)
 
     if os.getenv("FLASK_ENV") == "development":
         admin.init_app(app)
