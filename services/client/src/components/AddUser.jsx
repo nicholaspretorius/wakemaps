@@ -36,7 +36,11 @@ const AddUser = props => {
         />
       </div>
 
-      <input type="submit" className="button is-primary is-large is-fullwidth" value="Submit" />
+      <input
+        type="submit"
+        className="button is-primary is-large is-fullwidth"
+        value="Submit"
+      />
     </form>
   );
 };
