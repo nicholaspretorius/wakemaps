@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const AddUser = props => {
   const { addUser, handleChange, username, email } = props;
@@ -38,6 +39,13 @@ const AddUser = props => {
       <input type="submit" className="button is-primary is-large is-fullwidth" value="Submit" />
     </form>
   );
+};
+
+AddUser.propTypes = {
+  username: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  addUser: PropTypes.func.isRequired
 };
 
 export default AddUser;
