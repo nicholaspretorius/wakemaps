@@ -22,6 +22,19 @@ class App extends Component {
   addUser = event => {
     event.preventDefault();
     console.log("Sanity Check! ", this.state);
+    const data = {
+      username: this.state.username,
+      email: this.state.email
+    };
+
+    axios
+      .post(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`, data)
+      .then(res => {
+        console.log(res);
+        this.getUsers();
+        this.setState({ username: "", email: "" });
+      })
+      .catch(e => console.error(e));
   };
 
   handleChange = event => {
