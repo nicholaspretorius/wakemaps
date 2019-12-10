@@ -51,6 +51,17 @@ class User(db.Model):
         except Exception as e:
             return e
 
+    @staticmethod
+    def decode_auth_token(auth_token):
+        """Decodes the access token - : param auth_token: - :return: integer/string"""
+        try:
+            payload = jwt.decode(auth_token, current_app.config.get("SECRET_KEY"))
+            return payload["sub"]
+        except jwt.ExpiredSignatureError:
+            return "Signature expired. Please login again."
+        except jwt.InvalidTokenError:
+            return "Invalid token. Please login again."
+
 
 if os.getenv("FLASK_ENV") == "development":
     from project import admin
