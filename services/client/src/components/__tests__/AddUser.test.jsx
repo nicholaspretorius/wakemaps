@@ -6,15 +6,19 @@ import AddUser from "./../AddUser";
 
 afterEach(cleanup);
 
-it("renders", () => {
-  const { asFragment } = render(<AddUser username="" email="" handleChange={() => true} />);
-  expect(asFragment()).toMatchSnapshot();
-});
+const props = {
+  username: "",
+  email: "",
+  handleChange: () => {
+    return true;
+  },
+  addUser: () => {
+    return true;
+  }
+};
 
 it("renders with default props", () => {
-  const { getByLabelText, getByText } = render(
-    <AddUser usrname="" email="" handleChange={() => true} />
-  );
+  const { getByLabelText, getByText } = render(<AddUser {...props} />);
 
   const usernameInput = getByLabelText("Username");
   expect(usernameInput).toHaveAttribute("type", "text");
@@ -28,4 +32,9 @@ it("renders with default props", () => {
 
   const buttonInput = getByText("Submit");
   expect(buttonInput).toHaveValue("Submit");
+});
+
+it("renders", () => {
+  const { asFragment } = render(<AddUser {...props} />);
+  expect(asFragment()).toMatchSnapshot();
 });
