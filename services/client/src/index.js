@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
 
-import UsersList from "./components/UsersList";
+import Users from "./components/Users";
 import AddUser from "./components/AddUser";
 
 class App extends Component {
@@ -66,7 +66,7 @@ class App extends Component {
               />
               <hr />
               <br />
-              <UsersList users={users} />
+              <Users users={users} />
             </div>
           </div>
         </div>
