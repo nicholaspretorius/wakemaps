@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
 
+import UsersList from "./components/usersList";
+
 class App extends Component {
   state = {
     users: []
@@ -29,11 +31,7 @@ class App extends Component {
               <h1 className="title is-1">Users</h1>
               <hr />
               <br />
-              {users.map(user => (
-                <p key={user.id} className="box title is-4 username">
-                  {user.username}
-                </p>
-              ))}
+              <UsersList users={users} />
             </div>
           </div>
         </div>
