@@ -1,4 +1,6 @@
+import datetime
 from flask import current_app
+import jwt
 import os
 from sqlalchemy.sql import func
 
@@ -29,6 +31,25 @@ class User(db.Model):
             "email": self.email,
             "active": self.active,
         }
+
+    def encode_auth_token(self, user_id):
+        """Generates the access token"""
+        try:
+            payload = {
+                "exp": datetime.datetime.utcnow()
+                + datetime.timedelta(
+                    days=current_app.config.get("TOKEN_EXPIRATION_DAYS"),
+                    seconds=current_app.config.get("TOKEN_EXPIRATION_SECONDS"),
+                ),
+                "iat": datetime.datetime.utcnow(),
+                "sub": user_id,
+            }
+
+            return jwt.encode(
+                payload, current_app.config.get("SECRET_KEY"), algorithm="HS256"
+            )
+        except Exception as e:
+            return e
 
 
 if os.getenv("FLASK_ENV") == "development":
