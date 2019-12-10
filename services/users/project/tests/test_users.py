@@ -8,7 +8,11 @@ def test_add_user(test_app, test_database):
     res = client.post(
         "/users",
         data=json.dumps(
-            {"username": "nicholas", "email": "nicholaspretorius@gmail.com", "password": "greaterthaneight"}
+            {
+                "username": "nicholas",
+                "email": "nicholaspretorius@gmail.com",
+                "password": "greaterthaneight",
+            }
         ),
         content_type="application/json",
     )
@@ -32,7 +36,7 @@ def test_add_user_invalid_json(test_app, test_database):
 def test_add_user_invalid_json_keys_no_password(test_app, test_database):
     client = test_app.test_client()
     res = client.post(
-        '/users',
+        "/users",
         data=json.dumps({"username": "testuser", "email": "test@test.com"}),
         content_type="application/json",
     )
@@ -62,14 +66,22 @@ def test_add_user_duplicate_email(test_app, test_database):
     client.post(
         "/users",
         data=json.dumps(
-            {"username": "nicholas", "email": "nicholaspretorius@gmail.com", "password": "greaterthaneight"}
+            {
+                "username": "nicholas",
+                "email": "nicholaspretorius@gmail.com",
+                "password": "greaterthaneight",
+            }
         ),
         content_type="application/json",
     )
     resp = client.post(
         "/users",
         data=json.dumps(
-            {"username": "nicholas", "email": "nicholaspretorius@gmail.com", "password": "greaterthaneight"}
+            {
+                "username": "nicholas",
+                "email": "nicholaspretorius@gmail.com",
+                "password": "greaterthaneight",
+            }
         ),
         content_type="application/json",
     )
