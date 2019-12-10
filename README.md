@@ -24,6 +24,7 @@
 
 * `docker-compose exec client npm test`
 * `docker-compose exec client react-scripts test --coverage`
+* `docker-compose exec client npm run lint`
 
 ### Working with the database
 
