@@ -1,9 +1,11 @@
-from flask import current_app
 import json
+
+from flask import current_app
+
+from project.tests.utils import add_user
 
 # import time
 
-from project.tests.utils import add_user
 
 
 def test_user_registration(test_app, test_database):
@@ -75,7 +77,7 @@ def test_user_registration_duplicate_username(test_app):
 def test_user_registration_invalid_json(test_app):
     client = test_app.test_client()
     res = client.post(
-        "/auth/register", data=json.dumps({}), content_type="application/json",
+        "/auth/register", data=json.dumps({}), content_type="application/json"
     )
 
     data = json.loads(res.data.decode())
@@ -165,7 +167,7 @@ def test_unregistered_user_login(test_app, test_database):
 def test_login_invalid_json(test_app, test_database):
     client = test_app.test_client()
     res = client.post(
-        "/auth/login", data=json.dumps({}), content_type="application/json",
+        "/auth/login", data=json.dumps({}), content_type="application/json"
     )
     data = json.loads(res.data.decode())
     assert res.status_code == 400
@@ -234,3 +236,43 @@ def test_invalid_logout(test_app, test_database):
     assert res.content_type == "application/json"
     assert "Invalid token. Please login again." in data["message"]
     assert "fail" in data["status"]
+
+
+def test_user_status(test_app):
+    add_user("testz", "testz@test.com", "test")
+    client = test_app.test_client()
+    current_app.config["TOKEN_EXPIRATION_SECONDS"] = 3
+    res_login = client.post(
+        "/auth/login",
+        data=json.dumps({"email": "testz@test.com", "password": "test"}),
+        content_type="application/json",
+    )
+
+    token = json.loads(res_login.data.decode())["auth_token"]
+    res = client.get(
+        "/auth/status",
+        headers={"Authorization": f"Bearer {token}"},
+        content_type="application/json",
+    )
+    data = json.loads(res.data.decode())
+    assert res.status_code == 200
+    assert res.content_type == "application/json"
+    assert "success" in data["status"]
+    assert data["data"] is not None
+    assert data["data"]["username"] == "testz"
+    assert data["data"]["email"] == "testz@test.com"
+    assert data["data"]["active"] is True
+
+
+def test_user_status_invalid(test_app, test_database):
+    client = test_app.test_client()
+    res = client.get(
+        "/auth/status",
+        headers={"Authorization": f"Bearer invalid_token"},
+        content_type="application/json",
+    )
+    data = json.loads(res.data.decode())
+    assert res.status_code == 401
+    assert res.content_type == "application/json"
+    assert "fail" in data["status"]
+    assert "Invalid token. Please login again." in data["message"]
