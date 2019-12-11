@@ -4,10 +4,8 @@ from flask import current_app
 
 from project.tests.utils import add_user
 
+
 # import time
-
-
-
 def test_user_registration(test_app, test_database):
     client = test_app.test_client()
     res = client.post(
