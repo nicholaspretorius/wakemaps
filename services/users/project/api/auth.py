@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from sqlalchemy import exc, or_
 
-from project import db, bcrypt
+from project import bcrypt, db
 from project.api.users.models import User
 
 auth_blueprint = Blueprint("auth", __name__)
@@ -97,3 +97,24 @@ def logout_user():
             return jsonify(res), 401
     else:
         return jsonify(res), 403
+
+
+@auth_blueprint.route("/auth/status", methods=["GET"])
+def get_user_status():
+    auth_header = request.headers.get("Authorization")
+    res = {"status": "fail", "message": "Token invalid."}
+    print("Auth Header: ", auth_header)
+    if auth_header:
+        auth_token = auth_header.split(" ")[1]
+        response = User.decode_auth_token(auth_token)
+        if not isinstance(response, str):
+            user = User.query.filter_by(id=response).first()
+            res["status"] = "success"
+            res["message"] = "Success."
+            res["data"] = user.to_json()
+            return jsonify(res), 200
+        else:
+            res["message"] = response
+            return jsonify(res), 401
+    else:
+        return jsonify(res), 401
