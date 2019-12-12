@@ -9,17 +9,13 @@ afterEach(cleanup);
 
 jest.mock("axios");
 
-it("renders properly when authenticated", async () => {
-  axios.mockImplementationOnce(() => {
-    return Promise.resolve({
-      data: {
-        id: 1,
-        email: "test@test.com",
-        username: "test"
-      }
-    });
-  });
+axios.mockImplementation(() =>
+  Promise.resolve({
+    data: { data: { email: "test@test.com", id: 1, username: "test" } }
+  })
+);
 
+it("renders properly when authenticated", async () => {
   const { container, findByTestId } = render(<UserStatus />);
 
   await wait(() => {
