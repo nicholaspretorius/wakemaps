@@ -2,19 +2,17 @@ import React from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
+import "./Nav.css";
+
 const titleStyle = {
   fontWeight: "bold"
 };
 
 const Nav = props => {
-  const { title } = props;
+  const { title, logout } = props;
 
   return (
-    <nav
-      className="navbar is-dark"
-      role="navigation"
-      aria-label="main navigation"
-    >
+    <nav className="navbar is-dark" role="navigation" aria-label="main navigation">
       <section className="container">
         <div className="navbar-brand">
           <Link to="/" className="navbar-item nav-title" style={titleStyle}>
@@ -50,9 +48,9 @@ const Nav = props => {
             <Link to="/login" className="navbar-item">
               Log In
             </Link>
-            <Link to="/logout" className="navbar-item">
-              Log Out
-            </Link>
+            <span onClick={logout} className="navbar-item link">
+              Logout
+            </span>
           </div>
         </div>
       </section>
@@ -61,7 +59,8 @@ const Nav = props => {
 };
 
 Nav.propTypes = {
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  logout: PropTypes.func.isRequired
 };
 
 export default Nav;
