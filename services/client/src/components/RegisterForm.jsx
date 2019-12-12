@@ -59,7 +59,9 @@ const RegisterForm = props => {
                 value={values.username}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                className={errors.username && touched.username ? "input errors" : "input"}
+                className={
+                  errors.username && touched.username ? "input errors" : "input"
+                }
                 type="text"
                 placeholder="Enter a username"
               />
@@ -77,7 +79,9 @@ const RegisterForm = props => {
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                className={errors.email && touched.email ? "input errors" : "input"}
+                className={
+                  errors.email && touched.email ? "input errors" : "input"
+                }
                 type="email"
                 placeholder="Enter an email"
               />
@@ -95,7 +99,9 @@ const RegisterForm = props => {
                 value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                className={errors.password && touched.password ? "input errors" : "input"}
+                className={
+                  errors.password && touched.password ? "input errors" : "input"
+                }
                 type="password"
                 placeholder="Enter a password"
               />
