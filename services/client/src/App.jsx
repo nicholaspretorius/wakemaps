@@ -8,6 +8,7 @@ import About from "./components/About";
 import Nav from "./components/Nav";
 import RegisterForm from "./components/RegisterForm";
 import LoginForm from "./components/LoginForm";
+import UserStatus from "./components/UserStatus";
 
 class App extends Component {
   state = {
@@ -126,6 +127,7 @@ class App extends Component {
                       />
                     )}
                   />
+                  <Route exact path="/status" render={() => <UserStatus />} />
                 </Switch>
               </div>
             </div>
