@@ -1,11 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Redirect } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
 import "./forms.css";
 
 const RegisterForm = props => {
+  if (props.isAuthenticated()) {
+    return <Redirect to="/" />;
+  }
   return (
     <Formik
       initialValues={{
@@ -114,7 +118,8 @@ const RegisterForm = props => {
 };
 
 RegisterForm.propTypes = {
-  handleRegisterFormSubmit: PropTypes.func.isRequired
+  handleRegisterFormSubmit: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.func.isRequired
 };
 
 export default RegisterForm;

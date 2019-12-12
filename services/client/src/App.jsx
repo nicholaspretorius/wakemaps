@@ -39,12 +39,20 @@ class App extends Component {
       });
   };
 
+  isAuthenticated = () => {
+    if (window.localStorage.getItem("authToken")) {
+      return true;
+    }
+    return false;
+  };
+
   handleRegisterFormSubmit = data => {
     const url = `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/register`;
     axios
       .post(url, data)
       .then(res => {
-        console.log(res.data);
+        window.localStorage.setItem("authToken", res.data.auth_token);
+        this.getUsers();
       })
       .catch(e => {
         console.error(e);
@@ -56,12 +64,16 @@ class App extends Component {
     axios
       .post(url, data)
       .then(res => {
-        console.log(res.data);
+        window.localStorage.setItem("authToken", res.data.auth_token);
       })
       .catch(e => {
         console.error(e);
       });
   };
+
+  logoutUser() {
+    window.localStorage.removeItem("authToken");
+  }
 
   componentDidMount() {
     this.getUsers();
@@ -71,7 +83,7 @@ class App extends Component {
     const { users, title } = this.state;
     return (
       <div>
-        <Nav title={title} />
+        <Nav title={title} logout={this.logoutUser} />
         <section className="section">
           <div className="container">
             <div className="columns">
@@ -98,13 +110,21 @@ class App extends Component {
                     exact
                     path="/register"
                     render={() => (
-                      <RegisterForm handleRegisterFormSubmit={this.handleRegisterFormSubmit} />
+                      <RegisterForm
+                        handleRegisterFormSubmit={this.handleRegisterFormSubmit}
+                        isAuthenticated={this.isAuthenticated}
+                      />
                     )}
                   />
                   <Route
                     exact
                     path="/login"
-                    render={() => <LoginForm handleLoginFormSubmit={this.handleLoginFormSubmit} />}
+                    render={() => (
+                      <LoginForm
+                        handleLoginFormSubmit={this.handleLoginFormSubmit}
+                        isAuthenticated={this.isAuthenticated}
+                      />
+                    )}
                   />
                 </Switch>
               </div>
