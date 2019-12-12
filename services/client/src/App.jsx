@@ -6,6 +6,8 @@ import Users from "./components/Users";
 import AddUser from "./components/AddUser";
 import About from "./components/About";
 import Nav from "./components/Nav";
+import RegisterForm from "./components/RegisterForm";
+import LoginForm from "./components/LoginForm";
 
 class App extends Component {
   state = {
@@ -86,6 +88,8 @@ class App extends Component {
                     )}
                   />
                   <Route exact path="/about" component={About} />
+                  <Route exact path="/register" component={RegisterForm} />
+                  <Route exact path="/login" component={LoginForm} />
                 </Switch>
               </div>
             </div>
