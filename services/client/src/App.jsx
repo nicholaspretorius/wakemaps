@@ -16,8 +16,9 @@ class App extends Component {
   };
 
   getUsers() {
+    const url = `${process.env.REACT_APP_USERS_SERVICE_URL}/users`;
     axios
-      .get(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`)
+      .get(url)
       .then(res => this.setState({ users: res.data.data.users }))
       .catch(e => {
         // console.log(e);
@@ -25,8 +26,9 @@ class App extends Component {
   }
 
   addUser = data => {
+    const url = `${process.env.REACT_APP_USERS_SERVICE_URL}/users`;
     axios
-      .post(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`, data)
+      .post(url, data)
       .then(res => {
         // console.log(res);
         this.getUsers();
@@ -37,10 +39,28 @@ class App extends Component {
       });
   };
 
-  handleChange = event => {
-    const obj = {};
-    obj[event.target.name] = event.target.value;
-    this.setState(obj);
+  handleRegisterFormSubmit = data => {
+    const url = `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/register`;
+    axios
+      .post(url, data)
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(e => {
+        console.error(e);
+      });
+  };
+
+  handleLoginFormSubmit = data => {
+    const url = `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/login`;
+    axios
+      .post(url, data)
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(e => {
+        console.error(e);
+      });
   };
 
   componentDidMount() {
@@ -48,7 +68,7 @@ class App extends Component {
   }
 
   render() {
-    const { users, username, email, title } = this.state;
+    const { users, title } = this.state;
     return (
       <div>
         <Nav title={title} />
@@ -66,12 +86,7 @@ class App extends Component {
                         <h1 className="is-1 title">Wakemaps Users</h1>
                         <hr />
                         <br />
-                        <AddUser
-                          username={username}
-                          email={email}
-                          addUser={this.addUser}
-                          handleChange={this.handleChange}
-                        />
+                        <AddUser addUser={this.addUser} />
                         <hr />
                         <br />
                         <Users users={users} />
@@ -79,8 +94,18 @@ class App extends Component {
                     )}
                   />
                   <Route exact path="/about" component={About} />
-                  <Route exact path="/register" component={RegisterForm} />
-                  <Route exact path="/login" component={LoginForm} />
+                  <Route
+                    exact
+                    path="/register"
+                    render={() => (
+                      <RegisterForm handleRegisterFormSubmit={this.handleRegisterFormSubmit} />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/login"
+                    render={() => <LoginForm handleLoginFormSubmit={this.handleLoginFormSubmit} />}
+                  />
                 </Switch>
               </div>
             </div>
