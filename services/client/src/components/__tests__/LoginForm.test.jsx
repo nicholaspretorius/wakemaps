@@ -7,16 +7,21 @@ import LoginForm from "./../LoginForm";
 afterEach(cleanup);
 
 const props = {
-  handleLoginFormSubmit: () => true
+  handleLoginFormSubmit: () => {
+    return true;
+  },
+  isAuthenticated: () => {
+    return false;
+  }
 };
 
 it("renders properly", () => {
-  const { getByText } = render(<LoginForm {...props} />);
+  const { getByText } = renderWithRouter(<LoginForm {...props} />);
   expect(getByText("Login")).toHaveClass("title");
 });
 
 it("renders with the default props", () => {
-  const { getByLabelText, getByText } = render(<LoginForm {...props} />);
+  const { getByLabelText, getByText } = renderWithRouter(<LoginForm {...props} />);
 
   const emailInput = getByLabelText("Email");
   expect(emailInput).toHaveAttribute("type", "email");
@@ -31,6 +36,6 @@ it("renders with the default props", () => {
 });
 
 it("renders", () => {
-  const { asFragment } = render(<LoginForm {...props} />);
+  const { asFragment } = renderWithRouter(<LoginForm {...props} />);
   expect(asFragment()).toMatchSnapshot();
 });

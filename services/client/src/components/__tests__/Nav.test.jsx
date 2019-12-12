@@ -6,14 +6,19 @@ import Nav from "./../Nav";
 
 afterEach(cleanup);
 
-const title = "Hello world!";
+const props = {
+  title: "Hello world!",
+  logout: () => {
+    return true;
+  }
+};
 
 it("renders a title", () => {
-  const { getByText } = renderWithRouter(<Nav title={title} />);
-  expect(getByText(title)).toHaveClass("nav-title");
+  const { getByText } = renderWithRouter(<Nav {...props} />);
+  expect(getByText(props.title)).toHaveClass("nav-title");
 });
 
 it("renders", () => {
-  const { asFragment } = renderWithRouter(<Nav title={title} />);
+  const { asFragment } = renderWithRouter(<Nav {...props} />);
   expect(asFragment()).toMatchSnapshot();
 });
