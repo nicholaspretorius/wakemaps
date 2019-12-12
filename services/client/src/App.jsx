@@ -12,8 +12,6 @@ import LoginForm from "./components/LoginForm";
 class App extends Component {
   state = {
     users: [],
-    username: "",
-    email: "",
     title: "Wakemaps"
   };
 
@@ -26,14 +24,7 @@ class App extends Component {
       });
   }
 
-  addUser = event => {
-    event.preventDefault();
-    // console.log("Sanity Check! ", this.state);
-    const data = {
-      username: this.state.username,
-      email: this.state.email
-    };
-
+  addUser = data => {
     axios
       .post(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`, data)
       .then(res => {
