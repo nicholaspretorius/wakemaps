@@ -9,11 +9,14 @@ import Nav from "./components/Nav";
 import RegisterForm from "./components/RegisterForm";
 import LoginForm from "./components/LoginForm";
 import UserStatus from "./components/UserStatus";
+import Message from "./components/Message";
 
 class App extends Component {
   state = {
     users: [],
-    title: "Wakemaps"
+    title: "Wakemaps",
+    messageType: null,
+    messageText: null
   };
 
   getUsers() {
@@ -34,9 +37,11 @@ class App extends Component {
         // console.log(res);
         this.getUsers();
         this.setState({ username: "", email: "" });
+        this.createMessage("success", "User successfully created!");
       })
       .catch(e => {
         // console.log(e);
+        this.createMessage("danger", "User already exists.");
       });
   };
 
@@ -70,9 +75,11 @@ class App extends Component {
       .then(res => {
         window.localStorage.setItem("authToken", res.data.auth_token);
         this.getUsers();
+        this.createMessage("success", "You have registered successfully!");
       })
       .catch(e => {
         console.error(e);
+        this.createMessage("danger", "User already exists.");
       });
   };
 
@@ -83,15 +90,32 @@ class App extends Component {
       .then(res => {
         window.localStorage.setItem("authToken", res.data.auth_token);
         this.getUsers();
+        this.createMessage("success", "You have logged in successfully!");
       })
       .catch(e => {
         console.error(e);
+        this.createMessage("danger", "Incorrect email and/or password.");
       });
   };
 
   logoutUser = () => {
     window.localStorage.removeItem("authToken");
     this.props.history.push("/");
+    this.createMessage("success", "You have successfully logged out.");
+  };
+
+  createMessage(type, text) {
+    this.setState({
+      messageType: type,
+      messageText: text
+    });
+  }
+
+  removeMessage = () => {
+    this.setState({
+      messageType: null,
+      messageText: null
+    });
   };
 
   componentDidMount() {
@@ -102,13 +126,16 @@ class App extends Component {
     const { users, title } = this.state;
     return (
       <div>
-        <Nav
-          title={title}
-          logout={this.logoutUser}
-          isAuthenticated={this.isAuthenticated}
-        />
+        <Nav title={title} logout={this.logoutUser} isAuthenticated={this.isAuthenticated} />
         <section className="section">
           <div className="container">
+            {this.state.messageType && this.state.messageText && (
+              <Message
+                messageType={this.state.messageType}
+                messageText={this.state.messageText}
+                removeMessage={this.removeMessage}
+              />
+            )}
             <div className="columns">
               <div className="column is-half">
                 <Switch>
@@ -152,9 +179,7 @@ class App extends Component {
                   <Route
                     exact
                     path="/status"
-                    render={() => (
-                      <UserStatus isAuthenticated={this.isAuthenticated} />
-                    )}
+                    render={() => <UserStatus isAuthenticated={this.isAuthenticated} />}
                   />
                 </Switch>
               </div>
