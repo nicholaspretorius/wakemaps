@@ -10,13 +10,44 @@ const titleStyle = {
 
 const Nav = props => {
   const { title, logout } = props;
-
+  let menu = (
+    <div className="navbar-menu">
+      <div className="navbar-start">
+        <Link to="/about" className="navbar-item" data-testid="nav-about">
+          About
+        </Link>
+      </div>
+      <div className="navbar-end">
+        <Link to="/register" className="navbar-item" data-testid="nav-register">
+          Register
+        </Link>
+        <Link to="/login" className="navbar-item" data-testid="nav-login">
+          Login
+        </Link>
+      </div>
+    </div>
+  );
+  if (props.isAuthenticated()) {
+    menu = (
+      <div className="navbar-menu">
+        <div className="navbar-start">
+          <Link to="/about" className="navbar-item" data-testid="nav-about">
+            About
+          </Link>
+          <Link to="/status" className="navbar-item" data-testid="nav-status">
+            User Status
+          </Link>
+        </div>
+        <div className="navbar-end">
+          <span onClick={logout} className="navbar-item link" data-testid="nav-logout">
+            Logout
+          </span>
+        </div>
+      </div>
+    );
+  }
   return (
-    <nav
-      className="navbar is-dark"
-      role="navigation"
-      aria-label="main navigation"
-    >
+    <nav className="navbar is-dark" role="navigation" aria-label="main navigation">
       <section className="container">
         <div className="navbar-brand">
           <Link to="/" className="navbar-item nav-title" style={titleStyle}>
@@ -36,27 +67,7 @@ const Nav = props => {
             <span />
           </span>
         </div>
-        <div className="navbar-menu">
-          <div className="navbar-start">
-            <Link to="/about" className="navbar-item">
-              About
-            </Link>
-            <Link to="/status" className="navbar-item">
-              User Status
-            </Link>
-          </div>
-          <div className="navbar-end">
-            <Link to="/register" className="navbar-item">
-              Register
-            </Link>
-            <Link to="/login" className="navbar-item">
-              Log In
-            </Link>
-            <span onClick={logout} className="navbar-item link">
-              Logout
-            </span>
-          </div>
-        </div>
+        {menu}
       </section>
     </nav>
   );
@@ -64,7 +75,8 @@ const Nav = props => {
 
 Nav.propTypes = {
   title: PropTypes.string.isRequired,
-  logout: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.func.isRequired
 };
 
 export default Nav;

@@ -14,7 +14,7 @@ class UserStatus extends Component {
     this.getUserStatus();
   }
 
-  getUserStatus(event) {
+  getUserStatus() {
     const options = {
       url: `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/status`,
       method: "get",
@@ -38,27 +38,24 @@ class UserStatus extends Component {
 
   render() {
     const { id, email, username } = this.state;
-    const { isAuthenticated } = this.props;
-
-    if (!isAuthenticated()) {
+    if (!this.props.isAuthenticated()) {
       return <Redirect to="/login" />;
-    } else {
-      return (
-        <div>
-          <ul>
-            <li>
-              <strong>User ID: </strong> <span data-testid="user-id">{id}</span>
-            </li>
-            <li>
-              <strong>Username: </strong> <span data-testid="user-username">{username}</span>
-            </li>
-            <li>
-              <strong>Email: </strong> <span data-testid="user-email">{email}</span>
-            </li>
-          </ul>
-        </div>
-      );
     }
+    return (
+      <div>
+        <ul>
+          <li>
+            <strong>User ID: </strong> <span data-testid="user-id">{id}</span>
+          </li>
+          <li>
+            <strong>Username: </strong> <span data-testid="user-username">{username}</span>
+          </li>
+          <li>
+            <strong>Email: </strong> <span data-testid="user-email">{email}</span>
+          </li>
+        </ul>
+      </div>
+    );
   }
 }
 

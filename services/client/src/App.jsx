@@ -40,12 +40,28 @@ class App extends Component {
       });
   };
 
-  isAuthenticated = () => {
-    if (window.localStorage.getItem("authToken")) {
-      return true;
+  isAuthenticated() {
+    const token = window.localStorage.getItem("authToken");
+    if (token) {
+      const options = {
+        url: `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/status`,
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      };
+      return axios(options)
+        .then(res => {
+          return true;
+        })
+        .catch(err => {
+          return false;
+        });
+    } else {
+      return false;
     }
-    return false;
-  };
+  }
 
   handleRegisterFormSubmit = data => {
     const url = `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/register`;
@@ -86,7 +102,7 @@ class App extends Component {
     const { users, title } = this.state;
     return (
       <div>
-        <Nav title={title} logout={this.logoutUser} />
+        <Nav title={title} logout={this.logoutUser} isAuthenticated={this.isAuthenticated} />
         <section className="section">
           <div className="container">
             <div className="columns">
