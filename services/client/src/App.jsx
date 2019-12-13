@@ -130,7 +130,11 @@ class App extends Component {
     const { users, title } = this.state;
     return (
       <div>
-        <Nav title={title} logout={this.logoutUser} isAuthenticated={this.isAuthenticated} />
+        <Nav
+          title={title}
+          logout={this.logoutUser}
+          isAuthenticated={this.isAuthenticated}
+        />
         <section className="section">
           <div className="container">
             {this.state.messageType && this.state.messageText && (
@@ -183,7 +187,9 @@ class App extends Component {
                   <Route
                     exact
                     path="/status"
-                    render={() => <UserStatus isAuthenticated={this.isAuthenticated} />}
+                    render={() => (
+                      <UserStatus isAuthenticated={this.isAuthenticated} />
+                    )}
                   />
                 </Switch>
               </div>
