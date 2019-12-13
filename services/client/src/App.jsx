@@ -44,25 +44,41 @@ class App extends Component {
       });
   }
 
+  createMessage(type, text) {
+    this.setState({
+      messageType: type,
+      messageText: text
+    });
+
+    setTimeout(() => {
+      this.removeMessage();
+    }, 3000);
+  }
+
+  removeMessage = () => {
+    this.setState({
+      messageType: null,
+      messageText: null
+    });
+  };
+
   addUser = data => {
     const url = `${process.env.REACT_APP_USERS_SERVICE_URL}/users`;
     axios
       .post(url, data)
       .then(res => {
-        // console.log(res);
         this.getUsers();
         this.setState({ username: "", email: "" });
         this.createMessage("success", "User successfully created!");
         this.handleCloseModal();
       })
       .catch(e => {
-        // console.log(e);
         this.createMessage("danger", "User already exists.");
         this.handleCloseModal();
       });
   };
 
-  removeUser(user_id) {
+  removeUser = user_id => {
     axios
       .delete(`${process.env.REACT_APP_USERS_SERVICE_URL}/users/${user_id}`)
       .then(res => {
@@ -70,10 +86,10 @@ class App extends Component {
         this.createMessage("success", "User removed.");
       })
       .catch(err => {
-        console.log(err);
+        console.error(err);
         this.createMessage("danger", "Something went wrong.");
       });
-  }
+  };
 
   isAuthenticated() {
     const token = window.localStorage.getItem("authToken");
@@ -134,30 +150,12 @@ class App extends Component {
     this.createMessage("success", "You have successfully logged out.");
   };
 
-  createMessage(type, text) {
-    this.setState({
-      messageType: type,
-      messageText: text
-    });
-
-    setTimeout(() => {
-      this.removeMessage();
-    }, 3000);
-  }
-
-  removeMessage = () => {
-    this.setState({
-      messageType: null,
-      messageText: null
-    });
-  };
-
-  handleOpenModal() {
+  handleOpenModal = () => {
     this.setState({ showModal: true });
-  }
-  handleCloseModal() {
+  };
+  handleCloseModal = () => {
     this.setState({ showModal: false });
-  }
+  };
 
   componentDidMount() {
     this.getUsers();
