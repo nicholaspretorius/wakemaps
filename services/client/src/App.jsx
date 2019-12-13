@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
 import axios from "axios";
 
 import Users from "./components/Users";
@@ -66,15 +66,17 @@ class App extends Component {
       .post(url, data)
       .then(res => {
         window.localStorage.setItem("authToken", res.data.auth_token);
+        this.getUsers();
       })
       .catch(e => {
         console.error(e);
       });
   };
 
-  logoutUser() {
+  logoutUser = () => {
     window.localStorage.removeItem("authToken");
-  }
+    this.props.history.push("/");
+  };
 
   componentDidMount() {
     this.getUsers();
@@ -127,7 +129,11 @@ class App extends Component {
                       />
                     )}
                   />
-                  <Route exact path="/status" render={() => <UserStatus />} />
+                  <Route
+                    exact
+                    path="/status"
+                    render={() => <UserStatus isAuthenticated={this.isAuthenticated} />}
+                  />
                 </Switch>
               </div>
             </div>
@@ -138,4 +144,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);

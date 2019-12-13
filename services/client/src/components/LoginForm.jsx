@@ -7,7 +7,9 @@ import * as Yup from "yup";
 import "./forms.css";
 
 const LoginForm = props => {
-  if (props.isAuthenticated()) {
+  const { isAuthenticated } = props;
+
+  if (isAuthenticated()) {
     return <Redirect to="/" />;
   }
   return (
@@ -55,9 +57,7 @@ const LoginForm = props => {
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                className={
-                  errors.email && touched.email ? "input errors" : "input"
-                }
+                className={errors.email && touched.email ? "input errors" : "input"}
                 type="email"
                 placeholder="Enter an email"
               />
@@ -75,9 +75,7 @@ const LoginForm = props => {
                 value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                className={
-                  errors.password && touched.password ? "input errors" : "input"
-                }
+                className={errors.password && touched.password ? "input errors" : "input"}
                 type="password"
                 placeholder="Enter a password"
               />
