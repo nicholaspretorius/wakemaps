@@ -22,7 +22,9 @@ axios.mockImplementation(() =>
 );
 
 it("renders properly when authenticated", async () => {
-  const { container, findByTestId } = renderWithRouter(<UserStatus {...props} />);
+  const { container, findByTestId } = renderWithRouter(
+    <UserStatus {...props} />
+  );
 
   await wait(() => {
     expect(axios).toHaveBeenCalledTimes(1);

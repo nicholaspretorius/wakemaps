@@ -39,7 +39,11 @@ const Nav = props => {
           </Link>
         </div>
         <div className="navbar-end">
-          <span onClick={logout} className="navbar-item link" data-testid="nav-logout">
+          <span
+            onClick={logout}
+            className="navbar-item link"
+            data-testid="nav-logout"
+          >
             Logout
           </span>
         </div>
@@ -47,7 +51,11 @@ const Nav = props => {
     );
   }
   return (
-    <nav className="navbar is-dark" role="navigation" aria-label="main navigation">
+    <nav
+      className="navbar is-dark"
+      role="navigation"
+      aria-label="main navigation"
+    >
       <section className="container">
         <div className="navbar-brand">
           <Link to="/" className="navbar-item nav-title" style={titleStyle}>

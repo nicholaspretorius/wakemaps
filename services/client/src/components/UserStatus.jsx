@@ -48,10 +48,12 @@ class UserStatus extends Component {
             <strong>User ID: </strong> <span data-testid="user-id">{id}</span>
           </li>
           <li>
-            <strong>Username: </strong> <span data-testid="user-username">{username}</span>
+            <strong>Username: </strong>{" "}
+            <span data-testid="user-username">{username}</span>
           </li>
           <li>
-            <strong>Email: </strong> <span data-testid="user-email">{email}</span>
+            <strong>Email: </strong>{" "}
+            <span data-testid="user-email">{email}</span>
           </li>
         </ul>
       </div>
