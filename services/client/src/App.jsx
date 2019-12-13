@@ -109,6 +109,10 @@ class App extends Component {
       messageType: type,
       messageText: text
     });
+
+    setTimeout(() => {
+      this.removeMessage();
+    }, 3000);
   }
 
   removeMessage = () => {
