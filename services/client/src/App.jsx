@@ -3,7 +3,6 @@ import { Route, Switch, withRouter } from "react-router-dom";
 import axios from "axios";
 
 import Users from "./components/Users";
-import AddUser from "./components/AddUser";
 import About from "./components/About";
 import Nav from "./components/Nav";
 import RegisterForm from "./components/RegisterForm";
@@ -130,11 +129,7 @@ class App extends Component {
     const { users, title } = this.state;
     return (
       <div>
-        <Nav
-          title={title}
-          logout={this.logoutUser}
-          isAuthenticated={this.isAuthenticated}
-        />
+        <Nav title={title} logout={this.logoutUser} isAuthenticated={this.isAuthenticated} />
         <section className="section">
           <div className="container">
             {this.state.messageType && this.state.messageText && (
@@ -154,9 +149,6 @@ class App extends Component {
                       <div>
                         <br />
                         <h1 className="is-1 title">Wakemaps Users</h1>
-                        <hr />
-                        <br />
-                        <AddUser addUser={this.addUser} />
                         <hr />
                         <br />
                         <Users users={users} />
@@ -187,9 +179,7 @@ class App extends Component {
                   <Route
                     exact
                     path="/status"
-                    render={() => (
-                      <UserStatus isAuthenticated={this.isAuthenticated} />
-                    )}
+                    render={() => <UserStatus isAuthenticated={this.isAuthenticated} />}
                   />
                 </Switch>
               </div>
