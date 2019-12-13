@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import PropTypes from "prop-types";
 import axios from "axios";
 
 class UserStatus extends Component {
@@ -23,7 +25,6 @@ class UserStatus extends Component {
     };
     return axios(options)
       .then(res => {
-        console.log(res.data.data);
         this.setState({
           id: res.data.data.id,
           email: res.data.data.email,
@@ -37,22 +38,32 @@ class UserStatus extends Component {
 
   render() {
     const { id, email, username } = this.state;
-    return (
-      <div>
-        <ul>
-          <li>
-            <strong>User ID: </strong> <span data-testid="user-id">{id}</span>
-          </li>
-          <li>
-            <strong>Username: </strong> <span data-testid="user-username">{username}</span>
-          </li>
-          <li>
-            <strong>Email: </strong> <span data-testid="user-email">{email}</span>
-          </li>
-        </ul>
-      </div>
-    );
+    const { isAuthenticated } = this.props;
+
+    if (!isAuthenticated()) {
+      return <Redirect to="/login" />;
+    } else {
+      return (
+        <div>
+          <ul>
+            <li>
+              <strong>User ID: </strong> <span data-testid="user-id">{id}</span>
+            </li>
+            <li>
+              <strong>Username: </strong> <span data-testid="user-username">{username}</span>
+            </li>
+            <li>
+              <strong>Email: </strong> <span data-testid="user-email">{email}</span>
+            </li>
+          </ul>
+        </div>
+      );
+    }
   }
 }
+
+UserStatus.propTypes = {
+  isAuthenticated: PropTypes.func.isRequired
+};
 
 export default UserStatus;
