@@ -5,17 +5,42 @@ const Users = props => {
   const { users } = props;
   return (
     <div>
-      {users.map(user => (
-        <p key={user.id} className="box title is-4 username">
-          {user.username}
-        </p>
-      ))}
+      <table className="table is-hoverable is-fullwidth">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Active</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          {users.map(user => (
+            <tr key={user.id}>
+              <td>{user.id}</td>
+              <td>{user.email}</td>
+              <td className="username">{user.username}</td>
+              <td>{String(user.active)}</td>
+              <td>
+                <button
+                  className="button is-danger is-small"
+                  onClick={() => props.removeUser(user.id)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
 
 Users.propTypes = {
-  users: PropTypes.array.isRequired
+  users: PropTypes.array.isRequired,
+  removeUser: PropTypes.func.isRequired
 };
 
 export default Users;

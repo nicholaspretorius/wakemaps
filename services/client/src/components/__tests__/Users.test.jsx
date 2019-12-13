@@ -22,12 +22,14 @@ const users = [
 ];
 
 it("renders", () => {
-  const { asFragment } = render(<Users users={users} />);
+  const { asFragment } = render(
+    <Users users={users} removeUser={() => true} />
+  );
   expect(asFragment()).toMatchSnapshot();
 });
 
 it("renders a username", () => {
-  const { getByText } = render(<Users users={users} />);
+  const { getByText } = render(<Users users={users} removeUser={() => true} />);
   expect(getByText("nicholas")).toHaveClass("username");
   expect(getByText("nic")).toHaveClass("username");
 });
