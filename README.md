@@ -45,3 +45,7 @@ Make changes?
 
 * `docker-compose exec users black project`
 * `docker-compose exec users /bin/bash -c "isort project/*/*.py"`
+
+Remove <none> Docker images: 
+
+* `docker rmi $(docker images -f “dangling=true” -q)`
