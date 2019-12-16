@@ -32,6 +32,6 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 RUN pip install gunicorn
 COPY ./services/users .
-CMD gunicorn -b 0.0.0.0:5000 manage:app --daemon --log-level debug && \
+CMD gunicorn -b 0.0.0.0:5000 manage:app --daemon --log-level debug --capture-output && \
     sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/conf.d/default.conf && \
     nginx -g 'daemon off;'
