@@ -48,4 +48,11 @@ Make changes?
 
 Remove <none> Docker images: 
 
-* `docker rmi $(docker images -f “dangling=true” -q)`
+* `docker rmi $(docker images -f "dangling=true" -q)`
+
+
+### Prod
+
+* `export REACT_APP_USERS_SERVICE_URL=http://localhost:8007`
+* `docker build -f Dockerfile.deploy -t registry.heroku.com/wakemaps-test/web .`
+* `docker run --name wakemaps-test -e PORT=8765 -e DATABASE_URL="$(echo $DATABASE_URL)" -p 8007:8765 registry.heroku.com/wakemaps-test/web:latest`
