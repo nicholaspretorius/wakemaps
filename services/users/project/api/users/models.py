@@ -24,6 +24,9 @@ class User(db.Model):
             password, current_app.config.get("BCRYPT_LOG_ROUNDS")
         ).decode()
 
+    def __repr__(self):
+        return f"<User id: {self.id}, email: {self.email}>"
+
     def to_json(self):
         return {
             "id": self.id,
