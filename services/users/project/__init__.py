@@ -5,6 +5,8 @@ from flask_admin import Admin
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+import logging
+
 
 # instantiate db
 db = SQLAlchemy()
@@ -17,6 +19,10 @@ def create_app(script_info=None):
 
     # instantiate app
     app = Flask(__name__)
+
+    gunicorn_logger = logging.getLogger("gunicorn.error")
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
 
     # set config
     app_settings = os.getenv("APP_SETTINGS")
