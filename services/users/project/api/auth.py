@@ -1,8 +1,9 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, current_app
 from sqlalchemy import exc, or_
 
 from project import bcrypt, db
 from project.api.users.models import User
+
 
 auth_blueprint = Blueprint("auth", __name__)
 
@@ -36,6 +37,8 @@ def register_user():
             db.session.add(new_user)
             db.session.commit()
             auth_token = new_user.encode_auth_token(new_user.id)
+            current_app.logger.debug(f"Auth Token: {auth_token}, {type(auth_token)}")
+            current_app.logger.debug(f"Auth Token Decode: {auth_token.decode()}")
             res["status"] = "success"
             res["message"] = "Successfully registered."
             res["auth_token"] = auth_token.decode()
@@ -67,6 +70,8 @@ def login_user():
         print(user)
         if user and bcrypt.check_password_hash(user.password, password):
             auth_token = user.encode_auth_token(user.id)
+            current_app.logger.debug(f"Auth Token: {auth_token}, {type(auth_token)}")
+            current_app.logger.debug(f"Auth Token Decode: {auth_token.decode()}")
             if auth_token:
                 res["status"] = "success"
                 res["message"] = "Login successful"
@@ -103,7 +108,6 @@ def logout_user():
 def get_user_status():
     auth_header = request.headers.get("Authorization")
     res = {"status": "fail", "message": "Token invalid."}
-    print("Auth Header: ", auth_header)
     if auth_header:
         auth_token = auth_header.split(" ")[1]
         response = User.decode_auth_token(auth_token)
@@ -118,3 +122,8 @@ def get_user_status():
             return jsonify(res), 401
     else:
         return jsonify(res), 401
+
+
+@auth_blueprint.route("/auth/ping", methods=["GET"])
+def auth_ping():
+    return {"status": "success", "ping": "pong!"}
