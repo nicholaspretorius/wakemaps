@@ -1,4 +1,4 @@
-# import sys
+import sys
 
 from flask.cli import FlaskGroup
 
