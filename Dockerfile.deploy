@@ -6,7 +6,7 @@ ENV NODE_ENV production
 ENV REACT_APP_USERS_SERVICE_URL $REACT_APP_USERS_SERVICE_URL
 COPY ./services/client/package*.json ./
 RUN npm install
-RUN npm install react-scripts@3.0.1
+# RUN npm install react-scripts@3.0.1
 COPY ./services/client/ .
 RUN npm run build
 
