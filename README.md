@@ -39,12 +39,12 @@
 
 * `docker-compose exec users flake8 project`
 * `docker-compose exec users black project --check`
-* `docker-compose exec users /bin/bash -c "isort project/*/*.py --check-only"`
+* `docker-compose exec users /bin/sh -c "isort project/*/*.py --check-only"`
 
 Make changes? 
 
 * `docker-compose exec users black project`
-* `docker-compose exec users /bin/bash -c "isort project/*/*.py"`
+* `docker-compose exec users /bin/sh -c "isort project/*/*.py"`
 
 Remove <none> Docker images: 
 
