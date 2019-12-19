@@ -1,9 +1,8 @@
-from flask import Blueprint, jsonify, request, current_app
+from flask import Blueprint, current_app, jsonify, request
 from sqlalchemy import exc, or_
 
 from project import bcrypt, db
 from project.api.users.models import User
-
 
 auth_blueprint = Blueprint("auth", __name__)
 
